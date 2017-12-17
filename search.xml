@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[kvm-spice-4k-8k]]></title>
+    <url>%2F2016%2F05%2F12%2Fkvm-spice-4k-8k%2F</url>
+    <content type="text"><![CDATA[现有问题在Linux下，使用Spice显示KVM虚拟机，默认分辨率最大只能达到2560x1600，如下图： 解决方法修改虚拟机配置文件把虚拟机关机，然后打开在/etc/libvirt/qemu目录的虚拟机的配置文件，不同发行版位置可能略有不同。找到显卡的部分，一般显存是16M，如下：1234&lt;video&gt; &lt;model type='qxl' ram='65536' vram='65536' vgamem='16384' heads='1'/&gt; &lt;address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x0'/&gt; &lt;/video&gt; 修改其中的ram、vram和vgamem的值，这里注意vgamem的最大值只能是ram和vram的一半，修改显存为128M（128x1024）后如下：1234&lt;video&gt; &lt;model type='qxl' ram='262144' vram='262144' vgamem='131072' heads='1'/&gt; &lt;address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x0'/&gt; &lt;/video&gt; 重载配置文件重新载入配置文件，并且重启虚拟机12# virsh define 配置文件名字# virsh reboot 虚拟机名字 选择高清分辨率重新启动虚拟机后，就可以选择8K分辨率了，如下图： 注意事项因为Spice目前仅仅使用CPU进行解码和渲染，所以在8K分辨率下，显示速度相当慢，更不要说播放视频了。 测试环境测试日期为2016-04-23，测试环境如下： 类型 版本 OS Gentoo 64bit QEMU 2.5.0-r2 Libvirt 1.3.2-r1 Spice 0.13.0]]></content>
+      <categories>
+        <category>KVM</category>
+      </categories>
+      <tags>
+        <tag>KVM</tag>
+        <tag>Spice</tag>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+</search>
